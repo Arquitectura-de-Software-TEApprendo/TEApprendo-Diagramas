@@ -1,0 +1,126 @@
+@startuml
+!define Entity class
+
+' ==================
+' Entidades Principales
+' ==================
+Entity "Minedu" {
+}
+
+Entity "Docente" {
+  + nombre: String
+  + especialidad: String
+}
+
+Entity "ProgramaciónCurricular" {
+}
+
+Entity "PlanificaciónCurricular" {
+}
+
+Entity "UnidadDidáctica" {
+  + duración: String
+  + situaciónSignificativa: String
+  + propósitoDeAprendizaje: String
+}
+
+Entity "Competencia" <<Abstract>> {
+  + nombre: String
+  + descripción: String
+}
+
+Entity "Sesión" {
+  + duración: String
+  + inicio: String
+  + desarrollo: String
+  + conclusión: String
+}
+
+Entity "JuegoRA" {
+  + nombre: String
+  + tipo: String
+  + dificultad: String
+  + temática: String
+}
+
+Entity "Producto" {
+  + nombre: String
+  + descripción: String
+}
+
+Entity "CriterioEvaluación" {
+  + descripción: String
+  + nivelEsperado: String
+}
+
+Entity "InstrumentoEvaluación" {
+  + tipo: String
+  + detalle: String
+}
+
+' ==================
+' Objetos Teóricos
+' ==================
+
+Entity "MatrizAprendizaje" <<Abstract>> {
+  + temas: String
+}
+
+Entity "Capacidad" <<Abstract>> {
+  + descripción: String
+}
+
+Entity "Habilidad" <<Abstract>> {
+  + descripción: String
+}
+
+Entity "Actitud" <<Abstract>> {
+  + descripción: String
+}
+
+Entity "Desempeño" <<Abstract>> {
+  + descripción: String
+}
+
+' ==================
+' Relaciones Principales
+' ==================
+Minedu --> ProgramaciónCurricular : "propone" 1..*
+
+Minedu --> JuegoRA : "diseña" 1..*
+JuegoRA --> CriterioEvaluación : "incorpora" 1..*
+JuegoRA --> MatrizAprendizaje : "se alinea con" 1..1
+
+ProgramaciónCurricular --> PlanificaciónCurricular : "es directriz de" 1..*
+PlanificaciónCurricular --> UnidadDidáctica : "se descompone en" 1..*
+UnidadDidáctica --> Competencia : "se fundamenta en" 1..*
+
+UnidadDidáctica --> MatrizAprendizaje : "se elabora con" 1..*
+MatrizAprendizaje --> Sesión : "guía la creación de" 1..*
+
+Sesión --> Competencia : "alinea a" 1..*
+Sesión --> JuegoRA : "integra" 1..*
+Sesión --> Producto : "genera" 0..*
+
+
+
+Competencia --> Capacidad : "incluye" 1..1
+Competencia --> Habilidad : "desarrolla" 1..1
+Competencia --> Actitud : "involucra" 1..1
+Capacidad --> Desempeño : "se evidencia con" 1..1
+Habilidad --> Desempeño : "se evidencia con" 1..1
+Actitud --> Desempeño : "se evidencia con" 1..1
+Desempeño --> CriterioEvaluación : "tiene" 1..*
+CriterioEvaluación --> InstrumentoEvaluación : "se mide con" 1..1
+
+
+
+' ==================
+' Relación del Docente
+' ==================
+Docente --> PlanificaciónCurricular : "diversifica" 1..*
+Docente --> UnidadDidáctica : "diseña" 1..*
+Docente --> Sesión : "prepara" 1..*
+Docente --> CriterioEvaluación : "establece" 1..*
+
+@enduml
